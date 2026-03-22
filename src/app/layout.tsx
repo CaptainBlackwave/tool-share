@@ -3,6 +3,7 @@ import { Bebas_Neue, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Providers } from "@/components/Providers";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -38,9 +39,11 @@ export default function RootLayout({
           fontFamily: "var(--font-dm), system-ui, sans-serif",
         }}
       >
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <Providers>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

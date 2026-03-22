@@ -10,13 +10,19 @@ A peer-to-peer tool rental marketplace that connects people who own tools with p
 - **Messaging** - In-app communication between renters and owners
 - **Dashboard** - Manage your listings, rentals, and earnings
 - **Identity Verification** - Secure verification flow for all users
+- **Calendar & Availability** - Real-time availability checking with date picker
+- **Handoff Protocol** - Photo-based condition verification for pickups/returns
 
 ## Tech Stack
 
-- Next.js 16 with App Router
-- TypeScript
-- Tailwind CSS 4
-- Bun package manager
+- **Frontend**: Next.js 16 with App Router, React 19, Tailwind CSS 4
+- **Backend**: Next.js Server Actions
+- **Database**: Supabase (PostgreSQL with PostGIS)
+- **ORM**: Drizzle ORM
+- **Authentication**: Clerk
+- **Storage**: UploadThing
+- **Payments**: Stripe Connect
+- **Package Manager**: Bun
 
 ## Getting Started
 
@@ -35,7 +41,19 @@ bun lint
 
 # Type checking
 bun typecheck
+
+# Push schema to database
+bunx drizzle-kit push
 ```
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in your API keys:
+
+- Clerk: Authentication
+- Supabase: Database
+- UploadThing: File storage
+- Stripe: Payments
 
 ## Project Structure
 
@@ -49,13 +67,26 @@ src/
 │   ├── book/[toolId]/       # Booking flow
 │   ├── dashboard/            # User dashboard
 │   ├── messages/             # Messaging
-│   └── auth/                 # Authentication
+│   ├── auth/                 # Authentication
+│   └── api/                  # API routes & webhooks
 ├── components/
 │   ├── layout/               # Header, Footer
 │   └── ui/                   # Reusable components
-└── lib/
-    └── data.ts               # Mock data
+├── actions/                  # Server Actions
+├── lib/                      # Utilities & configs
+└── middleware.ts             # Auth middleware
 ```
+
+## Booking State Machine
+
+The platform implements a strict booking lifecycle:
+
+1. **pending** - Borrower submits request
+2. **accepted** - Lender approves
+3. **active** - Tool handed over
+4. **completed** - Tool returned successfully
+5. **disputed** - Issue reported
+6. **rejected**/cancelled - Request declined/canceled
 
 ## Design
 

@@ -12,6 +12,7 @@ import {
 import { relations } from 'drizzle-orm';
 
 export const userModeEnum = pgEnum('user_mode', ['borrower', 'lender', 'both']);
+export const userRoleEnum = pgEnum('user_role', ['user', 'admin']);
 export const toolConditionEnum = pgEnum('tool_condition', ['new', 'like-new', 'good', 'fair']);
 export const bookingStatusEnum = pgEnum('booking_status', [
   'pending',
@@ -31,6 +32,9 @@ export const users = pgTable('users', {
   avatar: text('avatar'),
   phone: text('phone'),
   mode: userModeEnum('mode').default('both'),
+  role: userRoleEnum('role').default('user'),
+  rating: decimal('rating', { precision: 3, scale: 2 }).default('0'),
+  reviewCount: integer('review_count').default(0),
   stripeAccountId: text('stripe_account_id'),
   stripeAccountStatus: text('stripe_account_status'),
   stripeCustomerId: text('stripe_customer_id'),
@@ -53,6 +57,8 @@ export const tools = pgTable('tools', {
   replacementValue: decimal('replacement_value', { precision: 10, scale: 2 }).notNull(),
   instantBook: boolean('instant_book').default(false),
   bufferDays: integer('buffer_days').default(0),
+  rating: decimal('rating', { precision: 3, scale: 2 }).default('0'),
+  reviewCount: integer('review_count').default(0),
   latitude: decimal('latitude', { precision: 10, scale: 7 }),
   longitude: decimal('longitude', { precision: 10, scale: 7 }),
   city: text('city'),
@@ -91,6 +97,9 @@ export const reviews = pgTable('reviews', {
   toolId: uuid('tool_id').references(() => tools.id, { onDelete: 'set null' }),
   rating: integer('rating').notNull(),
   text: text('text'),
+  isPublic: boolean('is_public').default(false),
+  otherReviewSubmitted: boolean('other_review_submitted').default(false),
+  expiresAt: timestamp('expires_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
