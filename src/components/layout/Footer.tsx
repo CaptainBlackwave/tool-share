@@ -64,9 +64,13 @@ export function Footer() {
         </div>
 
         <div className="border-t border-[#333] mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-[#6b6b6b]">
-            &copy; 2024 ToolShare. All rights reserved.
-          </p>
+          <div className="flex flex-col md:flex-row gap-4 text-sm text-[#6b6b6b]">
+            <p>&copy; 2024 ToolShare. All rights reserved.</p>
+            <div className="flex gap-4">
+              <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            </div>
+          </div>
           <div className="flex gap-4">
             <Link href="#" className="text-[#6b6b6b] hover:text-white transition-colors">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

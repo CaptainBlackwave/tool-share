@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Tool, User } from '@/lib/data';
 
 interface ToolCardProps {
@@ -19,10 +20,12 @@ export function ToolCard({ tool, owner }: ToolCardProps) {
   return (
     <Link href={`/tools/${tool.id}`} className="card block overflow-hidden group">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <img 
+        <Image 
           src={tool.images[0]} 
           alt={tool.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
         {tool.instantBook && (
           <span className="absolute top-3 left-3 badge bg-[#2d6a4f] text-white text-xs">

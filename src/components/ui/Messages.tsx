@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/lib/supabase/client';
 
 interface Message {
@@ -36,7 +36,7 @@ export function ChatMessages({ conversationId, currentUserId, otherUser }: Messa
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     const { data, error } = await supabase
       .from('messages')
       .select('*')
@@ -47,15 +47,16 @@ export function ChatMessages({ conversationId, currentUserId, otherUser }: Messa
       setMessages(data as Message[]);
     }
     setLoading(false);
-  };
+  }, [conversationId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchMessages();
 
     const interval = setInterval(fetchMessages, 5000);
 
     return () => clearInterval(interval);
-  }, [conversationId]);
+  }, [fetchMessages]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -1,9 +1,39 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { tools, users, reviews } from '@/lib/data';
+import type { Metadata } from 'next';
 
 interface PageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const tool = tools.find(t => t.id === id);
+  
+  if (!tool) {
+    return {
+      title: 'Tool Not Found - ToolShare',
+    };
+  }
+
+  return {
+    title: `${tool.title} - ToolShare`,
+    description: tool.description,
+    openGraph: {
+      title: tool.title,
+      description: tool.description,
+      images: tool.images[0] ? [tool.images[0]] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: tool.title,
+      description: tool.description,
+      images: tool.images[0] ? [tool.images[0]] : [],
+    },
+  };
 }
 
 export default async function ToolDetailPage({ params }: PageProps) {
@@ -34,10 +64,13 @@ export default async function ToolDetailPage({ params }: PageProps) {
           <div className="lg:col-span-2">
             <div className="bg-white border-2 border-[#d4d0c8] rounded-lg overflow-hidden mb-6">
               <div className="aspect-video relative">
-                <img 
+                <Image 
                   src={tool.images[0]} 
                   alt={tool.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 800px"
+                  priority
                 />
                 {tool.instantBook && (
                   <span className="absolute top-4 left-4 badge bg-[#2d6a4f] text-white">
@@ -53,7 +86,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
                       key={idx}
                       className={`flex-shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 ${idx === 0 ? 'border-[#e85d04]' : 'border-transparent'}`}
                     >
-                      <img src={img} alt="" className="w-full h-full object-cover" />
+                      <Image src={img} alt="" fill className="object-cover" sizes="80px" />
                     </button>
                   ))}
                 </div>
@@ -76,10 +109,12 @@ export default async function ToolDetailPage({ params }: PageProps) {
               </div>
 
               <div className="flex items-center gap-4 py-4 border-y border-[#d4d0c8]">
-                <img 
+                <Image 
                   src={owner.avatar} 
                   alt={owner.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  width={48}
+                  height={48}
+                  className="rounded-full object-cover"
                 />
                 <div>
                   <p className="font-medium text-[#222]">{owner.name}</p>
@@ -143,10 +178,12 @@ export default async function ToolDetailPage({ params }: PageProps) {
                     return (
                       <div key={review.id} className="border-b border-[#d4d0c8] pb-4 last:border-0">
                         <div className="flex items-center gap-3 mb-2">
-                          <img 
-                            src={reviewer?.avatar} 
-                            alt={reviewer?.name}
-                            className="w-10 h-10 rounded-full object-cover"
+                          <Image 
+                            src={reviewer?.avatar || ''} 
+                            alt={reviewer?.name || ''}
+                            width={40}
+                            height={40}
+                            className="rounded-full object-cover"
                           />
                           <div>
                             <p className="font-medium text-[#222]">{reviewer?.name}</p>
