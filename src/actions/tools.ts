@@ -21,6 +21,7 @@ export async function createTool(formData: FormData) {
   const pricePerWeek = formData.get('pricePerWeek') as string;
   const replacementValue = formData.get('replacementValue') as string;
   const instantBook = formData.get('instantBook') === 'true';
+  const bufferDays = parseInt(formData.get('bufferDays') as string || '0');
   const latitude = formData.get('latitude') as string;
   const longitude = formData.get('longitude') as string;
   const city = formData.get('city') as string;
@@ -43,6 +44,7 @@ export async function createTool(formData: FormData) {
       pricePerWeek,
       replacementValue,
       instantBook,
+      bufferDays,
       latitude: latitude || null,
       longitude: longitude || null,
       city: city || null,
@@ -86,6 +88,7 @@ export async function updateTool(toolId: string, formData: FormData) {
   const pricePerWeek = formData.get('pricePerWeek') as string;
   const replacementValue = formData.get('replacementValue') as string;
   const instantBook = formData.get('instantBook') === 'true';
+  const bufferDays = parseInt(formData.get('bufferDays') as string || '0');
   const latitude = formData.get('latitude') as string;
   const longitude = formData.get('longitude') as string;
   const city = formData.get('city') as string;
@@ -103,6 +106,7 @@ export async function updateTool(toolId: string, formData: FormData) {
       pricePerWeek,
       replacementValue,
       instantBook,
+      bufferDays,
       latitude: latitude || null,
       longitude: longitude || null,
       city: city || null,

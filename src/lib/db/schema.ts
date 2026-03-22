@@ -15,11 +15,12 @@ export const userModeEnum = pgEnum('user_mode', ['borrower', 'lender', 'both']);
 export const toolConditionEnum = pgEnum('tool_condition', ['new', 'like-new', 'good', 'fair']);
 export const bookingStatusEnum = pgEnum('booking_status', [
   'pending',
-  'confirmed',
+  'accepted',
+  'rejected',
+  'cancelled',
   'active',
   'completed',
   'disputed',
-  'cancelled',
 ]);
 export const pickupMethodEnum = pgEnum('pickup_method', ['meetup', 'delivery']);
 
@@ -51,6 +52,7 @@ export const tools = pgTable('tools', {
   pricePerWeek: decimal('price_per_week', { precision: 10, scale: 2 }),
   replacementValue: decimal('replacement_value', { precision: 10, scale: 2 }).notNull(),
   instantBook: boolean('instant_book').default(false),
+  bufferDays: integer('buffer_days').default(0),
   latitude: decimal('latitude', { precision: 10, scale: 7 }),
   longitude: decimal('longitude', { precision: 10, scale: 7 }),
   city: text('city'),
@@ -74,6 +76,7 @@ export const bookings = pgTable('bookings', {
   pickupLocation: text('pickup_location'),
   stripePaymentIntentId: text('stripe_payment_intent_id'),
   stripePaymentStatus: text('stripe_payment_status'),
+  expiresAt: timestamp('expires_at'),
   pickupPhotos: jsonb('pickup_photos').$type<string[]>().default([]),
   returnPhotos: jsonb('return_photos').$type<string[]>().default([]),
   createdAt: timestamp('created_at').defaultNow().notNull(),

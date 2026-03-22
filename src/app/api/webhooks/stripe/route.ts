@@ -105,3 +105,27 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ received: true });
 }
+
+export async function GET() {
+  const now = new Date().toISOString();
+  
+  const { data: expiredBookings, error } = await supabaseAdmin
+    .from('bookings')
+    .update({
+      status: 'rejected',
+      updatedAt: now,
+    })
+    .eq('status', 'pending')
+    .lt('expiresAt', now)
+    .select();
+
+  if (error) {
+    console.error('Failed to reject expired bookings:', error);
+    return NextResponse.json({ error: 'Failed to process' }, { status: 500 });
+  }
+
+  return NextResponse.json({ 
+    processed: expiredBookings?.length || 0,
+    message: 'Expired bookings rejected' 
+  });
+}
