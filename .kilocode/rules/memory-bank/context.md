@@ -2,11 +2,20 @@
 
 ## Current State
 
-**Project Status**: ✅ Phase 1 & 2 Complete
+**Project Status**: ✅ Phase 3 Complete
 
-ToolShare is now backed by a full-stack infrastructure with authentication, database, payments, and media storage.
+ToolShare has full booking state machine and availability logic implemented.
 
 ## Recently Completed
+
+### Phase 3 - Booking State Machine
+- [x] Updated booking status enum with proper states: pending, accepted, rejected, cancelled, active, completed, disputed
+- [x] Created state transition validation (`src/lib/dates.ts`)
+- [x] Built availability checking to prevent double-booking (`src/lib/availability.ts`)
+- [x] Added race condition prevention in createBooking
+- [x] Added buffer days support for tool owners
+- [x] Added 24-hour expiration for pending bookings
+- [x] Added cancellation refund logic based on timing
 
 ### Phase 1 & 2 Infrastructure
 - [x] Installed dependencies: Clerk, Supabase, Drizzle ORM, UploadThing, Stripe
@@ -47,6 +56,8 @@ ToolShare is now backed by a full-stack infrastructure with authentication, data
 | `src/app/api/webhooks/stripe/route.ts` | Stripe webhook handler |
 | `src/app/api/uploadthing/route.ts` | UploadThing API route |
 | `drizzle.config.ts` | Drizzle Kit configuration |
+| `src/lib/dates.ts` | Date utilities & state machine |
+| `src/lib/availability.ts` | Booking availability checking |
 
 ### UI Pages
 | File/Directory | Purpose |
