@@ -24,10 +24,10 @@ export function Footer() {
               COMPANY
             </h4>
             <ul className="space-y-2 text-sm text-[#9ca3af]">
-              <li><Link href="#" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Careers</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Press</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Blog</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
+              <li><Link href="/press" className="hover:text-white transition-colors">Press</Link></li>
+              <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
             </ul>
           </div>
 
@@ -36,10 +36,10 @@ export function Footer() {
               SUPPORT
             </h4>
             <ul className="space-y-2 text-sm text-[#9ca3af]">
-              <li><Link href="#" className="hover:text-white transition-colors">Help Center</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Safety</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Insurance</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Contact Us</Link></li>
+              <li><Link href="/help" className="hover:text-white transition-colors">Help Center</Link></li>
+              <li><Link href="/safety" className="hover:text-white transition-colors">Safety</Link></li>
+              <li><Link href="/insurance" className="hover:text-white transition-colors">Insurance</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
