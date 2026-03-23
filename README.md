@@ -24,6 +24,13 @@ A peer-to-peer tool rental marketplace that connects people who own tools with p
 - **Cron Jobs** - Automated booking expiration and payout release
 - **Marketplace Analytics** - Track liquidity metrics, search-to-fill rate, utilization
 
+### Admin Panel
+- **Command Center** - Overview with metrics, alerts, and activity feed
+- **User Management** - Suspend users, verify identity
+- **Tools Moderation** - Takedown inappropriate listings, filter by category
+- **Bookings Management** - Force refund/complete bookings
+- **Reviews Moderation** - Delete violating reviews
+
 ### Pages
 - Landing page with hero, categories, featured tools
 - Browse/search with radius filtering and map view
@@ -31,7 +38,7 @@ A peer-to-peer tool rental marketplace that connects people who own tools with p
 - Booking flow with calendar and price calculator
 - User dashboard with Lending/Borrowing views
 - Messaging with real-time polling
-- Admin dashboard for dispute resolution
+- Full Admin Command Center with sidebar navigation
 - Analytics dashboard for marketplace health
 - Legal pages (Privacy Policy, Terms of Service)
 - Company pages (About, Careers, Press, Blog, Help, Safety, Insurance, Contact)
@@ -69,6 +76,9 @@ bun typecheck
 
 # Push schema to database
 bunx drizzle-kit push
+
+# Seed database with admin and mock data
+bun run db:seed
 ```
 
 ## Environment Variables
@@ -76,6 +86,7 @@ bunx drizzle-kit push
 Copy `.env.example` to `.env.local` and fill in your API keys:
 
 - **Clerk**: Authentication (`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`)
+- **Admin**: Set admin user ID (`ADMIN_CLERK_ID`)
 - **Supabase**: Database (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`)
 - **UploadThing**: File storage (`UPLOADTHING_SECRET`, `UPLOADTHING_APP_ID`)
 - **Stripe**: Payments (`STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`)
@@ -89,42 +100,58 @@ src/
 ├── app/
 │   ├── page.tsx                    # Landing page
 │   ├── browse/                     # Browse tools
-│   ├── tools/[id]/                 # Tool detail page
-│   ├── list/                       # Create listing
-│   ├── book/[toolId]/              # Booking flow
-│   ├── dashboard/                  # User dashboard
-│   ├── messages/                   # Messaging
-│   ├── admin/                      # Admin dashboard
-│   ├── analytics/                  # Marketplace analytics
-│   ├── privacy/                    # Privacy Policy
-│   ├── terms/                      # Terms of Service
-│   ├── about/                      # About Us
-│   ├── careers/                    # Careers
-│   ├── contact/                    # Contact Us
-│   ├── blog/                       # Blog & SEO content
-│   ├── help/                       # Help Center
-│   ├── safety/                     # Safety Center
+│   ├── tools/[id]/                # Tool detail page
+│   ├── list/                      # Create listing
+│   ├── book/[toolId]/            # Booking flow
+│   ├── dashboard/                 # User dashboard
+│   ├── messages/                  # Messaging
+│   ├── admin/                     # Admin panel
+│   │   ├── page.tsx              # Command Center
+│   │   ├── users/                # User management
+│   │   ├── tools/                # Tools moderation
+│   │   ├── bookings/             # Bookings management
+│   │   └── reviews/              # Reviews moderation
+│   ├── analytics/                 # Marketplace analytics
+│   ├── privacy/                   # Privacy Policy
+│   ├── terms/                     # Terms of Service
+│   ├── about/                     # About Us
+│   ├── careers/                   # Careers
+│   ├── contact/                   # Contact Us
+│   ├── blog/                      # Blog & SEO content
+│   ├── help/                      # Help Center
+│   ├── safety/                    # Safety Center
 │   ├── insurance/                  # Insurance info
-│   ├── auth/                       # Authentication
-│   └── api/                        # API routes, webhooks, cron
+│   ├── auth/                      # Authentication
+│   └── api/                       # API routes, webhooks, cron
+├── actions/                        # Server Actions (tools, bookings, admin, etc.)
 ├── components/
-│   ├── layout/                     # Header, Footer
-│   ├── ui/                         # Reusable components
-│   └── analytics/                  # Analytics tracking
-├── actions/                        # Server Actions (tools, bookings, stripe, etc.)
-├── lib/                           # Utilities, configs, ORM schema
-└── middleware.ts                  # Auth middleware
+│   ├── layout/                    # Header, Footer
+│   ├── ui/                        # Reusable components
+│   └── analytics/                 # Analytics tracking
+├── lib/                            # Utilities, configs, ORM schema
+├── db/
+│   └── seed.ts                    # Database seeding script
+└── middleware.ts                   # Auth middleware
 ```
 
 ## Database Schema
 
 Tables in Supabase:
-- **users** - User profiles with Clerk ID, Stripe account info, location
+- **users** - User profiles with Clerk ID, Stripe account info, location, role
 - **tools** - Tool listings with images, pricing, geolocation coordinates
 - **bookings** - Rental bookings with payment status, handoff photos
 - **reviews** - Two-way ratings (released after both parties review)
 - **conversations** - Message threads
 - **messages** - Individual messages
+
+## Database Seeding
+
+Run `bun run db:seed` to populate the database with:
+- Admin user (set `ADMIN_CLERK_ID` in .env to create)
+- 15 mock users with random profiles
+- 30 mock tools with Cape Breton coordinates
+- 20 mock bookings in various states
+- 25 mock reviews
 
 ## Booking State Machine
 
