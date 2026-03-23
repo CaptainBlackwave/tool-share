@@ -54,6 +54,7 @@ A peer-to-peer tool rental marketplace that connects people who own tools with p
 - **Payments**: Stripe Connect (marketplace with lender payouts)
 - **Error Tracking**: Sentry
 - **Analytics**: Google Analytics
+- **Testing**: Playwright (E2E tests)
 - **Package Manager**: Bun
 
 ## Getting Started
@@ -80,6 +81,44 @@ bunx drizzle-kit push
 # Seed database with admin and mock data
 bun run db:seed
 ```
+
+## E2E Testing
+
+```bash
+# Run tests
+npm run test
+
+# Run tests with UI
+npm run test:ui
+
+# Run tests with visible browser
+npm run test:headed
+
+# Run tests for CI
+npm run test:ci
+```
+
+### Test Suites
+
+The Playwright test suite covers:
+
+1. **Authentication & User Management** - Sign up/in, role toggling
+2. **Tool Inventory (Lender Path)** - Create listing, edit/delete, calendar blocking
+3. **Discovery & Search (Borrower Path)** - Geospatial search, filters, map interaction
+4. **Golden Path (Multi-Context)** - Full booking lifecycle with concurrent users
+5. **Dispute & Admin Operations** - Dispute flow, admin resolution
+6. **Cron & Workers** - API endpoints, automated expiration
+7. **Edge Cases** - 404 pages, form validation, empty states
+8. **Performance** - Load times, console errors, image optimization
+
+### CI/CD
+
+GitHub Actions workflow (`.github/workflows/e2e.yml`) runs:
+- Build check
+- TypeScript type checking
+- ESLint
+- Playwright E2E tests (Chromium, Firefox, WebKit, Mobile)
+- Uploads test artifacts (screenshots, videos, traces) on failure
 
 ## Environment Variables
 
@@ -131,7 +170,11 @@ src/
 ├── lib/                            # Utilities, configs, ORM schema
 ├── db/
 │   └── seed.ts                    # Database seeding script
-└── middleware.ts                   # Auth middleware
+├── middleware.ts                   # Auth middleware
+└── tests/
+    ├── fixtures.ts                # Test fixtures and helpers
+    ├── e2e.spec.ts              # Core E2E tests
+    └── booking-flow.spec.ts      # Booking flow tests
 ```
 
 ## Database Schema
